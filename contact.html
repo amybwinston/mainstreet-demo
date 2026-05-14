@@ -1,0 +1,404 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0D1F3C; --cobalt: #1B3A6B; --crimson: #B22234; --brick: #8B1A2A;
+    --ivory: #F8F6F0; --cloud: #EEF0F5; --slate: #5A6A7E; --silver: #C5CBD8;
+    --gold: #BFA050; --white: #FFFFFF;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--white); color: var(--navy); overflow-x: hidden; margin: 0; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 18px 48px; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(13,31,60,0.1); transition: padding 0.3s, box-shadow 0.3s; }
+  nav.scrolled { padding: 12px 48px; box-shadow: 0 2px 24px rgba(13,31,60,0.08); }
+  .nav-logo { display: flex; align-items: center; gap: 12px; }
+  .nav-flag { display: flex; flex-direction: column; gap: 2.5px; flex-shrink: 0; }
+  .nav-flag span { display: block; height: 3px; width: 22px; border-radius: 1px; }
+  .nav-flag span:nth-child(1) { background: #B22234; }
+  .nav-flag span:nth-child(2) { background: #0D1F3C; }
+  .nav-flag span:nth-child(3) { background: #B22234; }
+  .nav-wordmark strong { display: block; font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--navy); letter-spacing: -0.01em; line-height: 1; }
+  .nav-wordmark em { display: block; font-family: var(--mono); font-style: normal; font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 3px; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--slate); text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-links a.active { color: var(--crimson); }
+  .nav-cta { background: var(--crimson); color: #fff; font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 10px 22px; border: none; cursor: pointer; letter-spacing: 0.04em; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--brick); }
+
+  /* PAGE HERO */
+  .page-hero { padding: 160px 48px 80px; background: var(--navy); position: relative; overflow: hidden; }
+  .page-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 28px 28px; }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .page-hero h1 { font-family: var(--serif); font-size: clamp(36px,5vw,64px); font-weight: 700; color: #fff; line-height: 1.06; letter-spacing: -0.02em; max-width: 680px; }
+  .page-hero h1 em { font-style: italic; color: var(--gold); }
+  .page-hero p { font-size: 17px; line-height: 1.75; color: rgba(255,255,255,0.6); max-width: 560px; margin-top: 20px; }
+  .page-hero-flag { height: 4px; background: linear-gradient(to right, var(--crimson) 33%, rgba(255,255,255,0.3) 33%, rgba(255,255,255,0.3) 66%, var(--cobalt) 66%); margin-top: 48px; }
+
+  /* CONTACT LAYOUT */
+  .contact-section { padding: 100px 48px; }
+  .contact-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; }
+
+  /* LEFT — INFO */
+  .contact-info {}
+  .section-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .contact-info h2 { font-family: var(--serif); font-size: clamp(26px,2.8vw,38px); font-weight: 700; color: var(--navy); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .contact-info h2 em { font-style: italic; color: var(--crimson); }
+  .contact-info p { font-size: 15px; line-height: 1.8; color: var(--slate); margin-bottom: 36px; }
+
+  .contact-block { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--silver); }
+  .contact-block:last-child { border-bottom: none; }
+  .contact-block-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .contact-block h3 { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .contact-block p { font-size: 14px; color: var(--slate); line-height: 1.65; }
+  .contact-block a { color: var(--cobalt); text-decoration: none; font-size: 14px; display: block; margin-top: 4px; transition: color 0.2s; }
+  .contact-block a:hover { color: var(--crimson); }
+
+  .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; margin-top: 8px; }
+  .hours-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--cloud); }
+  .hours-row .day { color: var(--navy); font-weight: 500; }
+  .hours-row .time { color: var(--slate); }
+  .hours-row.today .day { color: var(--crimson); font-weight: 700; }
+  .hours-row.today .time { color: var(--crimson); }
+
+  /* RIGHT — FORM */
+  .contact-form-wrap { background: var(--ivory); padding: 48px; border-top: 4px solid var(--crimson); }
+  .form-title { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .form-sub { font-size: 14px; color: var(--slate); margin-bottom: 32px; line-height: 1.6; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-field { margin-bottom: 16px; }
+  .form-field label { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--slate); margin-bottom: 7px; }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    width: 100%; font-family: var(--sans); font-size: 14px; color: var(--navy);
+    background: var(--white); border: 1px solid var(--silver);
+    padding: 12px 16px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+  }
+  .form-field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A6A7E' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; cursor: pointer; }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus { border-color: var(--cobalt); box-shadow: 0 0 0 3px rgba(27,58,107,0.1); }
+  .form-field textarea { resize: vertical; min-height: 120px; }
+
+  .form-submit { background: var(--crimson); color: #fff; font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 16px 32px; border: none; cursor: pointer; letter-spacing: 0.04em; width: 100%; margin-top: 8px; transition: background 0.2s, transform 0.15s; }
+  .form-submit:hover { background: var(--brick); transform: translateY(-1px); }
+
+  .form-note { font-size: 12px; color: var(--slate); margin-top: 12px; text-align: center; line-height: 1.5; }
+
+  /* SUCCESS STATE */
+  .form-success { display: none; text-align: center; padding: 40px 20px; }
+  .form-success.visible { display: block; }
+  .form-success-icon { font-size: 48px; margin-bottom: 16px; }
+  .form-success h3 { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .form-success p { font-size: 15px; color: var(--slate); line-height: 1.7; }
+
+  /* MAP PLACEHOLDER */
+  .map-section { background: var(--navy); padding: 0; height: 360px; position: relative; overflow: hidden; }
+  .map-embed { width: 100%; height: 100%; border: none; filter: grayscale(0.3) contrast(1.1); }
+  .map-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; background: linear-gradient(to right, rgba(13,31,60,0.5) 0%, transparent 40%); }
+  .map-card { position: absolute; top: 50%; left: 48px; transform: translateY(-50%); background: var(--white); padding: 24px 28px; box-shadow: 0 16px 48px rgba(13,31,60,0.2); max-width: 260px; }
+  .map-card-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .map-card h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .map-card p { font-size: 13px; color: var(--slate); line-height: 1.6; }
+  .map-card a { display: inline-block; margin-top: 12px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--crimson); text-decoration: none; }
+
+  /* FOOTER */
+  .footer-flag { height: 4px; background: linear-gradient(to right, #B22234 33%, #fff 33%, #fff 66%, #1B3A6B 66%); }
+  footer { background: var(--navy); padding: 80px 48px 36px; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 36px; }
+  .footer-brand-name { font-family: var(--serif); font-size: 20px; font-weight: 700; color: #fff; margin: 8px 0 4px; }
+  .footer-brand-sub { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+  .footer-brand p { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.3); margin-top: 18px; max-width: 270px; }
+  .footer-contact { margin-top: 24px; }
+  .footer-contact a { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: rgba(191,160,80,0.8); text-decoration: none; margin-bottom: 8px; }
+  .footer-col h4 { font-family: var(--mono); font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 18px; }
+  .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(255,255,255,0.18); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .page-hero { padding: 120px 24px 60px; }
+    .contact-section { padding: 60px 24px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .form-row { grid-template-columns: 1fr; }
+    .contact-form-wrap { padding: 32px 24px; }
+    .map-section { height: 500px; }
+    .map-card { left: 24px; right: 24px; top: auto; bottom: 24px; transform: none; max-width: none; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+    footer { padding: 60px 24px 32px; }
+  }
+</style>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <div class="nav-flag"><span></span><span></span><span></span></div>
+    <div class="nav-wordmark">
+      <strong>Main Street Lumber &amp; Millwork</strong>
+      <em>Est. 1970 · Denison, Texas</em>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/index.html">Home</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/our-story.html">Our Story</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/services.html">Services</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/products.html">Products</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="active">Contact</a></li>
+  </ul>
+  <a href="#estimate-form" class="nav-cta">Request Estimate</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">Get in touch</div>
+    <h1>Let's talk about your <em>next project</em></h1>
+    <p>We're based in Denison, Texas and serve builders across North Texas and Southern Oklahoma. Reach out and a member of our team will get back to you promptly.</p>
+    <div class="page-hero-flag"></div>
+  </div>
+</section>
+
+<!-- CONTACT + FORM -->
+<section class="contact-section">
+  <div class="contact-grid">
+
+    <!-- LEFT: INFO -->
+    <div class="contact-info reveal">
+      <div class="section-eyebrow">Find us</div>
+      <h2>We're on <em>Main Street</em></h2>
+      <p>Stop by our Denison location, give us a call, or fill out the estimate form and we'll be in touch within one business day.</p>
+
+      <div class="contact-block">
+        <div class="contact-block-label">Main Location</div>
+        <h3>Main Street Lumber</h3>
+        <p>230 E Main St<br>Denison, TX 75021</p>
+        <a href="tel:9034655388">(903) 465-5388</a>
+        <a href="mailto:info@mainstreetcompanies.com">info@mainstreetcompanies.com</a>
+        <a href="https://maps.google.com/?q=230+E+Main+St+Denison+TX" target="_blank" rel="noopener">Get directions →</a>
+      </div>
+
+      <div class="contact-block">
+        <div class="contact-block-label">Hours of Operation</div>
+        <h3>Monday – Friday</h3>
+        <div style="margin-top:12px">
+          <div class="hours-row today"><span class="day">Monday</span><span class="time">7:30 AM – 5:00 PM</span></div>
+          <div class="hours-row"><span class="day">Tuesday</span><span class="time">7:30 AM – 5:00 PM</span></div>
+          <div class="hours-row"><span class="day">Wednesday</span><span class="time">7:30 AM – 5:00 PM</span></div>
+          <div class="hours-row"><span class="day">Thursday</span><span class="time">7:30 AM – 5:00 PM</span></div>
+          <div class="hours-row"><span class="day">Friday</span><span class="time">7:30 AM – 5:00 PM</span></div>
+          <div class="hours-row"><span class="day">Saturday</span><span class="time">Closed</span></div>
+          <div class="hours-row"><span class="day">Sunday</span><span class="time">Closed</span></div>
+        </div>
+      </div>
+
+      <div class="contact-block">
+        <div class="contact-block-label">Online</div>
+        <h3>mainstreetcompanies.com</h3>
+        <a href="https://www.facebook.com/mainstreetcompanies" target="_blank" rel="noopener">Facebook →</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="reveal reveal-delay-1">
+      <div class="contact-form-wrap" id="estimate-form">
+        <div class="form-title">Request an Estimate</div>
+        <div class="form-sub">Fill out the form below and a member of our team will follow up within one business day.</div>
+
+        <form id="ms-contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="fname">First Name *</label>
+              <input type="text" id="fname" name="fname" required placeholder="John">
+            </div>
+            <div class="form-field">
+              <label for="lname">Last Name *</label>
+              <input type="text" id="lname" name="lname" required placeholder="Smith">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="company">Company</label>
+              <input type="text" id="company" name="company" placeholder="Smith Construction">
+            </div>
+            <div class="form-field">
+              <label for="phone">Phone *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="(903) 555-0000">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required placeholder="john@smithconstruction.com">
+          </div>
+
+          <div class="form-field">
+            <label for="project-type">Project Type *</label>
+            <select id="project-type" name="project-type" required>
+              <option value="" disabled selected>Select a category</option>
+              <option>New Home Construction</option>
+              <option>Home Renovation / Remodel</option>
+              <option>Commercial Construction</option>
+              <option>Multi-Family / Development</option>
+              <option>Custom Millwork Only</option>
+              <option>Lumber / Materials Only</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="timeline">Project Timeline</label>
+              <select id="timeline" name="timeline">
+                <option value="" disabled selected>When do you need materials?</option>
+                <option>Immediately (within 2 weeks)</option>
+                <option>1 – 3 months</option>
+                <option>3 – 6 months</option>
+                <option>6+ months out</option>
+                <option>Just exploring options</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="budget">Estimated Budget</label>
+              <select id="budget" name="budget">
+                <option value="" disabled selected>Approximate range</option>
+                <option>Under $10,000</option>
+                <option>$10,000 – $25,000</option>
+                <option>$25,000 – $50,000</option>
+                <option>$50,000 – $100,000</option>
+                <option>$100,000+</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="message">Project Details</label>
+            <textarea id="message" name="message" placeholder="Tell us about your project — what you're building, what materials you need, any specific products you're interested in..."></textarea>
+          </div>
+
+          <button type="submit" class="form-submit">Submit Estimate Request →</button>
+          <p class="form-note">We respond to all inquiries within one business day. Your information is never shared.</p>
+        </form>
+
+        <!-- SUCCESS STATE -->
+        <div class="form-success" id="form-success">
+          <div class="form-success-icon">✅</div>
+          <h3>We've got your request!</h3>
+          <p>Thank you for reaching out. A member of our team will follow up within one business day at the contact information you provided.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<div class="map-section">
+  <iframe
+    class="map-embed"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3317.2271521338835!2d-96.53503808785723!3d33.75479557315894!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864c845501619417%3A0xc7d6b6d2a00dd056!2sMain%20Street%20Lumber%20and%20Millwork!5e0!3m2!1sen!2sus!4v1778772704176!5m2!1sen!2sus"
+    allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    title="Main Street Lumber and Millwork — 230 E Main St, Denison TX">
+  </iframe>
+  <div class="map-overlay"></div>
+  <div class="map-card">
+    <div class="map-card-label">Main Location</div>
+    <h3>Main Street Lumber</h3>
+    <p>230 E Main St<br>Denison, TX 75021<br>(903) 465-5388</p>
+    <a href="https://maps.google.com/?q=230+E+Main+St+Denison+TX" target="_blank" rel="noopener">Open in Google Maps →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-flag"></div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-flag" style="margin-bottom:10px">
+          <span style="display:block;height:3px;width:22px;background:#B22234;border-radius:1px;margin-bottom:2.5px"></span>
+          <span style="display:block;height:3px;width:22px;background:rgba(255,255,255,0.2);border-radius:1px;margin-bottom:2.5px"></span>
+          <span style="display:block;height:3px;width:22px;background:#1B3A6B;border-radius:1px"></span>
+        </div>
+        <div class="footer-brand-name">Main Street Lumber<br>&amp; Millwork</div>
+        <div class="footer-brand-sub">Est. 1970 · Denison, Texas</div>
+        <p>Serving North Texas and Southern Oklahoma builders with quality materials and expert service.</p>
+        <div class="footer-contact">
+          <a href="tel:9034655388">(903) 465-5388</a>
+          <a href="#">230 E Main St, Denison, TX 75021</a>
+          <a href="mailto:info@mainstreetcompanies.com">info@mainstreetcompanies.com</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="https://amybwinston.github.io/mainstreet-demo/products.html">Lumber</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/products.html">Doors &amp; Millwork</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/products.html">Windows</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/products.html">Hardware</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/products.html">Moulding</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/products.html">Stairs</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="https://amybwinston.github.io/mainstreet-demo/services.html#select">Selection Services</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/services.html#build">Lumber Services</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/services.html#finish">Millwork Services</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://amybwinston.github.io/mainstreet-demo/our-story.html">Our Story</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html">Contact Us</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html">Request Estimate</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Main Street Lumber Inc. &amp; Main Street Millwork Inc. All rights reserved.</span>
+      <span>Denison, Texas</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+  reveals.forEach(el => observer.observe(el));
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+
+  // Highlight today's hours
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const today = days[new Date().getDay()];
+  document.querySelectorAll('.hours-row').forEach(row => {
+    if (row.querySelector('.day')?.textContent === today) row.classList.add('today');
+    else row.classList.remove('today');
+  });
+
+  // Form submit handler — shows success state
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('ms-contact-form').style.display = 'none';
+    document.getElementById('form-success').classList.add('visible');
+    // In production: replace this with a real form submission (WPForms, Formspree, etc.)
+  }
+</script>

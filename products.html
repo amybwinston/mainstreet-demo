@@ -1,0 +1,428 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0D1F3C; --cobalt: #1B3A6B; --crimson: #B22234; --brick: #8B1A2A;
+    --ivory: #F8F6F0; --cloud: #EEF0F5; --slate: #5A6A7E; --silver: #C5CBD8;
+    --gold: #BFA050; --white: #FFFFFF;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--white); color: var(--navy); overflow-x: hidden; margin: 0; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 18px 48px; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(13,31,60,0.1); transition: padding 0.3s, box-shadow 0.3s; }
+  nav.scrolled { padding: 12px 48px; box-shadow: 0 2px 24px rgba(13,31,60,0.08); }
+  .nav-logo { display: flex; align-items: center; gap: 12px; }
+  .nav-flag { display: flex; flex-direction: column; gap: 2.5px; flex-shrink: 0; }
+  .nav-flag span { display: block; height: 3px; width: 22px; border-radius: 1px; }
+  .nav-flag span:nth-child(1) { background: #B22234; }
+  .nav-flag span:nth-child(2) { background: #0D1F3C; }
+  .nav-flag span:nth-child(3) { background: #B22234; }
+  .nav-wordmark strong { display: block; font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--navy); letter-spacing: -0.01em; line-height: 1; }
+  .nav-wordmark em { display: block; font-family: var(--mono); font-style: normal; font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 3px; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--slate); text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-links a.active { color: var(--crimson); }
+  .nav-cta { background: var(--crimson); color: #fff; font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 10px 22px; border: none; cursor: pointer; letter-spacing: 0.04em; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--brick); }
+
+  /* PAGE HERO */
+  .page-hero { padding: 160px 48px 80px; background: var(--navy); position: relative; overflow: hidden; }
+  .page-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 28px 28px; }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .page-hero h1 { font-family: var(--serif); font-size: clamp(36px,5vw,64px); font-weight: 700; color: #fff; line-height: 1.06; letter-spacing: -0.02em; max-width: 680px; }
+  .page-hero h1 em { font-style: italic; color: var(--gold); }
+  .page-hero p { font-size: 17px; line-height: 1.75; color: rgba(255,255,255,0.6); max-width: 560px; margin-top: 20px; }
+  .page-hero-flag { height: 4px; background: linear-gradient(to right, var(--crimson) 33%, rgba(255,255,255,0.3) 33%, rgba(255,255,255,0.3) 66%, var(--cobalt) 66%); margin-top: 48px; }
+
+  /* PRODUCT NAV TABS */
+  .product-tabs { background: var(--white); border-bottom: 1px solid var(--silver); position: sticky; top: 72px; z-index: 100; }
+  .product-tabs-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; display: flex; gap: 0; overflow-x: auto; }
+  .product-tab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--slate); text-decoration: none; padding: 18px 24px; border-bottom: 3px solid transparent; white-space: nowrap; transition: color 0.2s, border-color 0.2s; }
+  .product-tab:hover { color: var(--navy); }
+  .product-tab.active { color: var(--crimson); border-bottom-color: var(--crimson); }
+
+  /* SHARED */
+  .section-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .inner { max-width: 1280px; margin: 0 auto; }
+
+  /* PRODUCT SECTIONS */
+  .product-section { padding: 100px 48px; }
+  .product-section.alt { background: var(--ivory); }
+  .product-section.dark { background: var(--navy); }
+
+  .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .product-layout.flip { direction: rtl; }
+  .product-layout.flip > * { direction: ltr; }
+
+  .prod-img { position: relative; }
+  .prod-img img { width: 100%; height: 420px; object-fit: cover; display: block; box-shadow: 0 20px 60px rgba(13,31,60,0.14); }
+  .prod-img-tag { position: absolute; bottom: 0; left: 0; background: var(--cobalt); color: #fff; font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; padding: 8px 16px; }
+  .product-section.alt .prod-img-tag { background: var(--crimson); }
+  .product-section.dark .prod-img-tag { background: var(--gold); color: var(--navy); }
+
+  .prod-body {}
+  .prod-body h2 { font-family: var(--serif); font-size: clamp(26px,2.8vw,40px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin: 14px 0 18px; }
+  .product-section:not(.dark) .prod-body h2 { color: var(--navy); }
+  .product-section.dark .prod-body h2 { color: #fff; }
+  .prod-body h2 em { font-style: italic; color: var(--crimson); }
+  .product-section.dark .prod-body h2 em { color: var(--gold); }
+  .prod-body p { font-size: 15px; line-height: 1.85; margin-bottom: 14px; }
+  .product-section:not(.dark) .prod-body p { color: var(--slate); }
+  .product-section.dark .prod-body p { color: rgba(255,255,255,0.55); }
+
+  .prod-items { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 24px 0; }
+  .prod-item { padding: 12px 16px; border: 1px solid var(--silver); }
+  .product-section.alt .prod-item { background: var(--white); }
+  .product-section.dark .prod-item { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); }
+  .prod-item span { font-size: 13px; font-weight: 500; }
+  .product-section:not(.dark) .prod-item span { color: var(--navy); }
+  .product-section.dark .prod-item span { color: rgba(255,255,255,0.75); }
+
+  .prod-cta-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; margin-top: 8px; transition: gap 0.2s; }
+  .product-section:not(.dark) .prod-cta-link { color: var(--cobalt); }
+  .product-section.dark .prod-cta-link { color: var(--gold); }
+  .prod-cta-link:hover { gap: 14px; }
+  .prod-cta-link::after { content: '→'; }
+
+  /* CTA */
+  .page-cta { background: var(--cobalt); padding: 80px 48px; position: relative; overflow: hidden; }
+  .page-cta::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--crimson); }
+  .page-cta::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, transparent, transparent 20px, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 21px); }
+  .page-cta-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+  .page-cta-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .page-cta h2 { font-family: var(--serif); font-size: clamp(24px,2.5vw,38px); font-weight: 700; color: #fff; line-height: 1.1; letter-spacing: -0.02em; }
+  .page-cta h2 em { font-style: italic; color: var(--gold); }
+  .page-cta p { font-size: 15px; color: rgba(255,255,255,0.5); margin-top: 8px; }
+  .btn-crimson { background: var(--crimson); color: #fff; font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 16px 32px; border: none; cursor: pointer; letter-spacing: 0.04em; flex-shrink: 0; white-space: nowrap; transition: background 0.2s, transform 0.15s; }
+  .btn-crimson:hover { background: var(--brick); transform: translateY(-2px); }
+
+  /* FOOTER */
+  .footer-flag { height: 4px; background: linear-gradient(to right, #B22234 33%, #fff 33%, #fff 66%, #1B3A6B 66%); }
+  footer { background: var(--navy); padding: 80px 48px 36px; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 36px; }
+  .footer-brand-name { font-family: var(--serif); font-size: 20px; font-weight: 700; color: #fff; margin: 8px 0 4px; }
+  .footer-brand-sub { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+  .footer-brand p { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.3); margin-top: 18px; max-width: 270px; }
+  .footer-contact { margin-top: 24px; }
+  .footer-contact a { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: rgba(191,160,80,0.8); text-decoration: none; margin-bottom: 8px; }
+  .footer-col h4 { font-family: var(--mono); font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 18px; }
+  .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(255,255,255,0.18); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .page-hero { padding: 120px 24px 60px; }
+    .product-tabs-inner { padding: 0 16px; }
+    .product-section { padding: 60px 24px; }
+    .product-layout, .product-layout.flip { grid-template-columns: 1fr; direction: ltr; gap: 40px; }
+    .prod-img img { height: 260px; }
+    .prod-items { grid-template-columns: 1fr; }
+    .page-cta { padding: 60px 24px; }
+    .page-cta-inner { flex-direction: column; align-items: flex-start; gap: 28px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+    footer { padding: 60px 24px 32px; }
+  }
+</style>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <div class="nav-flag"><span></span><span></span><span></span></div>
+    <div class="nav-wordmark">
+      <strong>Main Street Lumber &amp; Millwork</strong>
+      <em>Est. 1970 · Denison, Texas</em>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/index.html">Home</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/our-story.html">Our Story</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/services.html">Services</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/products.html" class="active">Products</a></li>
+    <li><a href="https://amybwinston.github.io/mainstreet-demo/contact.html">Contact</a></li>
+  </ul>
+  <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="nav-cta">Request Estimate</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">What we carry</div>
+    <h1>Everything your build <em>needs,</em><br>under one roof</h1>
+    <p>Six product categories, sourced for quality, stocked for availability, and backed by a team that knows every product we carry.</p>
+    <div class="page-hero-flag"></div>
+  </div>
+</section>
+
+<!-- STICKY PRODUCT TABS -->
+<nav class="product-tabs" aria-label="Product categories">
+  <div class="product-tabs-inner">
+    <a href="#lumber" class="product-tab active">Lumber</a>
+    <a href="#doors" class="product-tab">Doors &amp; Millwork</a>
+    <a href="#windows" class="product-tab">Windows</a>
+    <a href="#hardware" class="product-tab">Hardware</a>
+    <a href="#moulding" class="product-tab">Moulding</a>
+    <a href="#stairs" class="product-tab">Stairs</a>
+  </div>
+</nav>
+
+<!-- LUMBER -->
+<section class="product-section" id="lumber">
+  <div class="inner">
+    <div class="product-layout">
+      <div class="prod-img reveal">
+        <img src="https://amybwinston.github.io/mainstreet-demo/images/lumber.jpg" alt="Lumber products at Main Street">
+        <div class="prod-img-tag">Structural</div>
+      </div>
+      <div class="prod-body">
+        <div class="section-eyebrow reveal">Category 01</div>
+        <h2 class="reveal reveal-delay-1"><em>Lumber</em></h2>
+        <p class="reveal reveal-delay-2">The foundation of every build. We stock a comprehensive range of dimensional, engineered, and specialty lumber — graded and sourced to meet the demands of residential and commercial construction in North Texas.</p>
+        <p class="reveal reveal-delay-2">Our knowledgeable staff can help you specify the right product for every application, from framing to decking to structural applications.</p>
+        <div class="prod-items reveal reveal-delay-2">
+          <div class="prod-item"><span>Dimensional Lumber</span></div>
+          <div class="prod-item"><span>Engineered Lumber</span></div>
+          <div class="prod-item"><span>Treated Lumber</span></div>
+          <div class="prod-item"><span>Decking</span></div>
+          <div class="prod-item"><span>Timbers &amp; Beams</span></div>
+          <div class="prod-item"><span>Specialty Wood</span></div>
+        </div>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="prod-cta-link reveal reveal-delay-2">Get a lumber quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOORS & MILLWORK -->
+<section class="product-section alt" id="doors">
+  <div class="inner">
+    <div class="product-layout flip">
+      <div class="prod-img reveal">
+        <img src="https://amybwinston.github.io/mainstreet-demo/images/product-2.jpg" alt="Doors and millwork at Main Street Lumber">
+        <div class="prod-img-tag">Doors &amp; Millwork</div>
+      </div>
+      <div class="prod-body">
+        <div class="section-eyebrow reveal">Category 02</div>
+        <h2 class="reveal reveal-delay-1"><em>Doors</em> &amp; Millwork</h2>
+        <p class="reveal reveal-delay-2">From a grand pivot entry to a simple interior passage door, we carry the full range. Our door selection includes interior, exterior, and specialty options from trusted manufacturers — including our exclusive Tournerr soft-close iron pivot door line.</p>
+        <p class="reveal reveal-delay-2">Our millwork specialists can help configure complete door packages with frames, jambs, and hardware.</p>
+        <div class="prod-items reveal reveal-delay-2">
+          <div class="prod-item"><span>Interior Doors</span></div>
+          <div class="prod-item"><span>Exterior Doors</span></div>
+          <div class="prod-item"><span>Tournerr Pivot Doors</span></div>
+          <div class="prod-item"><span>French Doors</span></div>
+          <div class="prod-item"><span>Door Frames &amp; Jambs</span></div>
+          <div class="prod-item"><span>Custom Configurations</span></div>
+        </div>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="prod-cta-link reveal reveal-delay-2">Talk to our door team</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WINDOWS -->
+<section class="product-section dark" id="windows">
+  <div class="inner">
+    <div class="product-layout">
+      <div class="prod-img reveal">
+        <img src="https://amybwinston.github.io/mainstreet-demo/images/window.jpg" alt="Windows at Main Street Lumber">
+        <div class="prod-img-tag">Windows</div>
+      </div>
+      <div class="prod-body">
+        <div class="section-eyebrow reveal">Category 03</div>
+        <h2 class="reveal reveal-delay-1"><em>Windows</em></h2>
+        <p class="reveal reveal-delay-2">We carry Quaker Residential Windows — a comprehensive line covering every residential requirement. Quaker windows are known for thermal efficiency, ease of operation, safety features, and unique architectural styling options that set homes apart.</p>
+        <p class="reveal reveal-delay-2">Whether you're building a production home or a one-of-a-kind custom residence, our window specialists will help you find the right product for every opening.</p>
+        <div class="prod-items reveal reveal-delay-2">
+          <div class="prod-item"><span>Single &amp; Double Hung</span></div>
+          <div class="prod-item"><span>Casement Windows</span></div>
+          <div class="prod-item"><span>Picture Windows</span></div>
+          <div class="prod-item"><span>Bay &amp; Bow Windows</span></div>
+          <div class="prod-item"><span>Sliding Windows</span></div>
+          <div class="prod-item"><span>Custom Shapes</span></div>
+        </div>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="prod-cta-link reveal reveal-delay-2">Request a window quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HARDWARE -->
+<section class="product-section" id="hardware">
+  <div class="inner">
+    <div class="product-layout flip">
+      <div class="prod-img reveal">
+        <img src="https://amybwinston.github.io/mainstreet-demo/images/products.jpg" alt="Hardware at Main Street Lumber">
+        <div class="prod-img-tag">Hardware</div>
+      </div>
+      <div class="prod-body">
+        <div class="section-eyebrow reveal">Category 04</div>
+        <h2 class="reveal reveal-delay-1"><em>Hardware</em></h2>
+        <p class="reveal reveal-delay-2">The right hardware elevates every door, cabinet, and architectural detail. We carry a curated selection of door hardware, hinges, locks, and architectural hardware from manufacturers known for quality and durability.</p>
+        <p class="reveal reveal-delay-2">Our team helps you coordinate finishes across your hardware selections so the final result is cohesive and professional.</p>
+        <div class="prod-items reveal reveal-delay-2">
+          <div class="prod-item"><span>Door Knobs &amp; Levers</span></div>
+          <div class="prod-item"><span>Deadbolts &amp; Locksets</span></div>
+          <div class="prod-item"><span>Hinges</span></div>
+          <div class="prod-item"><span>Door Closers</span></div>
+          <div class="prod-item"><span>Barn Door Hardware</span></div>
+          <div class="prod-item"><span>Architectural Accents</span></div>
+        </div>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="prod-cta-link reveal reveal-delay-2">Browse hardware options</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOULDING -->
+<section class="product-section alt" id="moulding">
+  <div class="inner">
+    <div class="product-layout">
+      <div class="prod-img reveal">
+        <img src="https://amybwinston.github.io/mainstreet-demo/images/product-2.jpg" alt="Moulding at Main Street Lumber">
+        <div class="prod-img-tag">Moulding</div>
+      </div>
+      <div class="prod-body">
+        <div class="section-eyebrow reveal">Category 05</div>
+        <h2 class="reveal reveal-delay-1"><em>Moulding</em></h2>
+        <p class="reveal reveal-delay-2">Moulding is the finishing signature of a well-built home. We carry an extensive range of stock profiles for crown, base, casing, chair rail, and more — in multiple species and paint-grade options to suit every design intent.</p>
+        <p class="reveal reveal-delay-2">Need something custom? Our millwork team can source and coordinate custom profiles to match existing work or bring an architect's vision to life.</p>
+        <div class="prod-items reveal reveal-delay-2">
+          <div class="prod-item"><span>Crown Moulding</span></div>
+          <div class="prod-item"><span>Base Moulding</span></div>
+          <div class="prod-item"><span>Door &amp; Window Casing</span></div>
+          <div class="prod-item"><span>Chair Rail</span></div>
+          <div class="prod-item"><span>Picture Rail</span></div>
+          <div class="prod-item"><span>Custom Profiles</span></div>
+        </div>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="prod-cta-link reveal reveal-delay-2">Get moulding samples</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAIRS -->
+<section class="product-section dark" id="stairs">
+  <div class="inner">
+    <div class="product-layout flip">
+      <div class="prod-img reveal">
+        <img src="https://amybwinston.github.io/mainstreet-demo/images/p1.jpg" alt="Stair parts at Main Street Lumber">
+        <div class="prod-img-tag">Stairs</div>
+      </div>
+      <div class="prod-body">
+        <div class="section-eyebrow reveal">Category 06</div>
+        <h2 class="reveal reveal-delay-1">Stairs &amp; <em>Millwork</em></h2>
+        <p class="reveal reveal-delay-2">A staircase is often the centerpiece of a home's interior — and ours are built to be noticed. We carry a full range of stair parts in multiple wood species and styles, from traditional to contemporary.</p>
+        <p class="reveal reveal-delay-2">Our stair specialists work with builders and designers to configure complete stair packages that are accurate, on-time, and ready to install.</p>
+        <div class="prod-items reveal reveal-delay-2">
+          <div class="prod-item"><span>Treads &amp; Risers</span></div>
+          <div class="prod-item"><span>Newel Posts</span></div>
+          <div class="prod-item"><span>Balusters</span></div>
+          <div class="prod-item"><span>Handrails</span></div>
+          <div class="prod-item"><span>Volutes &amp; Fittings</span></div>
+          <div class="prod-item"><span>Complete Stair Packages</span></div>
+        </div>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="prod-cta-link reveal reveal-delay-2">Request a stair package quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="page-cta">
+  <div class="page-cta-inner">
+    <div>
+      <div class="page-cta-eyebrow">Need something specific?</div>
+      <h2>Let's find the right <em>product for you</em></h2>
+      <p>Talk to our team — no obligation, just expertise.</p>
+    </div>
+    <a href="https://amybwinston.github.io/mainstreet-demo/contact.html" class="btn-crimson">Request an Estimate →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-flag"></div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-flag" style="margin-bottom:10px">
+          <span style="display:block;height:3px;width:22px;background:#B22234;border-radius:1px;margin-bottom:2.5px"></span>
+          <span style="display:block;height:3px;width:22px;background:rgba(255,255,255,0.2);border-radius:1px;margin-bottom:2.5px"></span>
+          <span style="display:block;height:3px;width:22px;background:#1B3A6B;border-radius:1px"></span>
+        </div>
+        <div class="footer-brand-name">Main Street Lumber<br>&amp; Millwork</div>
+        <div class="footer-brand-sub">Est. 1970 · Denison, Texas</div>
+        <p>Serving North Texas and Southern Oklahoma builders with quality materials and expert service.</p>
+        <div class="footer-contact">
+          <a href="tel:9034655388">(903) 465-5388</a>
+          <a href="#">230 E Main St, Denison, TX 75021</a>
+          <a href="mailto:info@mainstreetcompanies.com">info@mainstreetcompanies.com</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="#lumber">Lumber</a>
+        <a href="#doors">Doors &amp; Millwork</a>
+        <a href="#windows">Windows</a>
+        <a href="#hardware">Hardware</a>
+        <a href="#moulding">Moulding</a>
+        <a href="#stairs">Stairs</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="https://amybwinston.github.io/mainstreet-demo/services.html#select">Selection Services</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/services.html#build">Lumber Services</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/services.html#finish">Millwork Services</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://amybwinston.github.io/mainstreet-demo/our-story.html">Our Story</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html">Contact Us</a>
+        <a href="https://amybwinston.github.io/mainstreet-demo/contact.html">Request Estimate</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Main Street Lumber Inc. &amp; Main Street Millwork Inc. All rights reserved.</span>
+      <span>Denison, Texas</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+  reveals.forEach(el => observer.observe(el));
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+
+  // Update active tab on scroll
+  const sections = document.querySelectorAll('.product-section[id]');
+  const tabs = document.querySelectorAll('.product-tab');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 160) current = s.id; });
+    tabs.forEach(t => {
+      t.classList.remove('active');
+      if (t.getAttribute('href') === '#' + current) t.classList.add('active');
+    });
+  });
+</script>
